@@ -1,0 +1,28 @@
+[
+  {
+    "styles": {
+      "rgb": "985689",
+      "argb": "FF985689",
+      "bold": true,
+      "italic": false,
+      "underlined": false,
+      "censored": false
+    },
+    "string": "Ha ein teil des satzes aber der rest"
+  },
+  {
+    "string": " "
+  },
+  {
+    "styles": {
+      "rgb": "985689",
+      "argb": "FF985689",
+      "bold": true,
+      "italic": false,
+      "underlined": false,
+      "censored": false
+    },
+    "string": "ist anders"
+  }
+]
+
