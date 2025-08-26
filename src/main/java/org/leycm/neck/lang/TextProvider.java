@@ -104,7 +104,8 @@ public class TextProvider {
      */
     @Contract("_, _, null -> new")
     private @NotNull Text getTranslationFromJson(String path, String key, Locale lang) {
-        if (lang == null) return  Text.of(path + "/" + key);
+        if (lang == null)
+            lang = Locale.US;
 
         try {
             JsonObject rootObject = loadLanguageFile(lang.getLanguage() + "_" + lang.getCountry());

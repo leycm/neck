@@ -37,12 +37,39 @@ public class Label {
         return new Label(path, key, TextProvider.getDefault());
     }
 
-
-
     private Label(String path, String key, TextProvider provider) {
         this.label = lang -> provider.translationOf(path, key, lang);
         this.path = path;
         this.key = key;
     }
 
+    public Text inDefaultLang() {
+        return label.apply(null);
+    }
+
+    public Text in(Locale lang) {
+        return label.apply(lang);
+    }
+
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public String toString() {
+        return path + ":" + key;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Label l)) return false;
+
+        return this.path.equalsIgnoreCase(l.path) ||
+                this.key.equalsIgnoreCase(l.key);
+    }
 }

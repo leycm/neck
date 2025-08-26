@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.leycm.neck.lang.Text;
+import org.leycm.neck.lang.Style;
 
 /**
  * Generic text adapters, e.g., for console output using ASCII/ANSI colors.
@@ -26,7 +27,7 @@ public interface GenericTextAdapter {
         public @NotNull String to(@NotNull Text text) {
             StringBuilder sb = new StringBuilder();
             for (Text.Part part : text.getParts()) {
-                Text.Style style = part.getStyles();
+                Style style = part.getStyles();
                 if (style != null) {
                     sb.append(applyStyle(style));
                 }
@@ -39,14 +40,13 @@ public interface GenericTextAdapter {
         @Contract(pure = true)
         @Override
         public @Nullable Text from(String object) {
-            // Not implemented, console ANSI codes cannot be reliably parsed back into Text
             return null;
         }
 
         /**
          * Builds ANSI codes for a given style.
          */
-        private static @NotNull String applyStyle(Text.@NotNull Style style) {
+        private static @NotNull String applyStyle(@NotNull Style style) {
             StringBuilder sb = new StringBuilder();
 
             if (style.isBold()) sb.append(BOLD);

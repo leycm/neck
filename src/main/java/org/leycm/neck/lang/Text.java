@@ -2,7 +2,6 @@ package org.leycm.neck.lang;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -39,7 +38,7 @@ public class Text {
         }
         return this;
     }
-    
+
     public Text replace(String placeholder, String value) {
         for (Part part : parts) {
             part.replace(placeholder, value);
@@ -120,96 +119,13 @@ public class Text {
 
         public void replace(@NotNull Map<String, String> placeholders) {
             for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
-
                 string = string.replaceAll("%" + placeholder.getKey() + "%", placeholder.getValue());
             }
         }
-
     }
-
-    public static final class Style {
-        private String rgb;
-        private String argb;
-        private boolean bold;
-        private boolean italic;
-        private boolean underlined;
-        private boolean strikethrough;
-        private boolean censored;
-
-        public Style() {
-        }
-
-        public Style rgb(String rgb) {
-            this.argb = "FF" + rgb;
-            this.rgb = rgb;
-            return this;
-        }
-
-        @Contract("_ -> this")
-        public Style argb(@NotNull String argb) {
-            this.argb = argb;
-            this.rgb = argb.substring(2, argb.length() -1);
-            return this;
-        }
-
-        public Style bold(boolean value) {
-            this.bold = value;
-            return this;
-        }
-
-        public Style italic(boolean value) {
-            this.italic = value;
-            return this;
-        }
-
-        public Style underlined(boolean value) {
-            this.underlined = value;
-            return this;
-        }
-
-        public Style strikethrough(boolean value) {
-            this.strikethrough = value;
-            return this;
-        }
-
-        public Style censored(boolean value) {
-            this.censored = value;
-            return this;
-        }
-
-        public String getRgb() {
-            return rgb;
-        }
-
-        public String getArgb() {
-            return argb;
-        }
-
-        public boolean isBold() {
-            return bold;
-        }
-
-        public boolean isItalic() {
-            return italic;
-        }
-
-        public boolean isUnderlined() {
-            return underlined;
-        }
-
-        public boolean isStrikethrough() {
-            return strikethrough;
-        }
-
-        public boolean isCensored() {
-            return censored;
-        }
-    }
-
 
     public interface Adapter<T> {
         T to(Text text);
         Text from(T object);
     }
-
 }
