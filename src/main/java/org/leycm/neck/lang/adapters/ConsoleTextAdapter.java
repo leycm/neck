@@ -9,12 +9,12 @@ import org.leycm.neck.lang.Style;
 /**
  * Generic text adapters, e.g., for console output using ASCII/ANSI colors.
  */
-public interface GenericTextAdapter {
+public interface ConsoleTextAdapter {
 
     /**
      * Adapter to convert {@link Text} to ANSI-colored strings for console output.
      */
-    Text.Adapter<String> ASCI_CONSOL = new Text.Adapter<>() {
+    Text.Adapter<String> ASCI = new Text.Adapter<>() {
 
         private static final String RESET = "\u001B[0m";
         private static final String BOLD = "\u001B[1m";

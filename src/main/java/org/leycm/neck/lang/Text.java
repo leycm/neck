@@ -3,12 +3,12 @@ package org.leycm.neck.lang;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.leycm.neck.lang.adapters.JsonTextAdapter;
 
 import java.util.*;
 
 public class Text {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final List<Part> parts = new ArrayList<>();
     private final TextProvider provider;
 
@@ -55,7 +55,7 @@ public class Text {
     }
 
     public String toJson() {
-        return GSON.toJson(parts);
+        return toString(JsonTextAdapter.EXTENDET);
     }
 
     public <T> T to(Class<T> type) {
@@ -72,6 +72,10 @@ public class Text {
 
     public static Text fromString(String s, @NotNull Text.Adapter<String> adapter) {
         return adapter.from(s);
+    }
+
+    public static Text fromJson(String s) {
+        return fromString(s, JsonTextAdapter.EXTENDET);
     }
 
     public static <T> Text from(@NotNull T object) {

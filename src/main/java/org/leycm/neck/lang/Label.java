@@ -7,9 +7,9 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public class Label {
-    private final Function<Locale, Text> label;
-    private final String path;
-    private final String key;
+    protected final Function<Locale, Text> label;
+    protected final String path;
+    protected final String key;
 
     /**
      * Creates a Label from a string representation
@@ -18,18 +18,41 @@ public class Label {
      * @throws IllegalArgumentException if the string format is invalid
      */
     @Contract("null -> fail")
-    public static @NotNull Label fromString(String serialized) {
-        if (serialized == null || serialized.isEmpty()) throw new IllegalArgumentException("Invalid string for Label deserialization");
+    public static @NotNull Label parse(String serialized) {
+        if (serialized == null || serialized.isEmpty() || (serialized.startsWith("<") && serialized.endsWith(">")))
+            throw new IllegalArgumentException("Invalid string for Label deserialization");
 
-        String[] parts = serialized.split("/", 2);
-        if (parts.length != 2) throw new IllegalArgumentException("String format should be 'path:key'");
+        String cleaned = serialized.replace("<", "").replace("<", "")
+                .replace("text:", "")
+                .replace("lang:", "");
 
-        String path = parts[0];
-        String key = parts[1];
+        if (serialized.startsWith("<text:")) {
+            return Label.text(Text.fromJson(cleaned));
+        }
 
-        if (path.isEmpty() || key.isEmpty()) throw new IllegalArgumentException("Path and key cannot be empty");
+        if (serialized.startsWith("<lang:")) {
+            String[] parts = serialized.split("/", 2);
+            if (parts.length != 2) throw new IllegalArgumentException("String format should be 'path:key'");
 
-        return new Label(path, key, TextProvider.getDefault());
+            String path = parts[0];
+            String key = parts[1];
+
+            if (path.isEmpty() || key.isEmpty()) throw new IllegalArgumentException("Path and key cannot be empty");
+
+            return new Label(path, key, TextProvider.getDefault());
+        }
+
+        throw new IllegalArgumentException("This is not a Label");
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull Label text(String text) {
+        return PreLabel.of(Text.of(text));
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull Label text(Text text) {
+        return PreLabel.of(text);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -37,14 +60,14 @@ public class Label {
         return new Label(path, key, TextProvider.getDefault());
     }
 
-    private Label(String path, String key, TextProvider provider) {
+    Label(String path, String key, TextProvider provider) {
         this.label = lang -> provider.translationOf(path, key, lang);
         this.path = path;
         this.key = key;
     }
 
     public Text inDefaultLang() {
-        return label.apply(null);
+        return in(null);
     }
 
     public Text in(Locale lang) {
@@ -62,7 +85,7 @@ public class Label {
 
     @Override
     public String toString() {
-        return path + ":" + key;
+        return "<lang:" + key + "/" + path + ">";
     }
 
     @Override
@@ -72,4 +95,5 @@ public class Label {
         return this.path.equalsIgnoreCase(l.path) ||
                 this.key.equalsIgnoreCase(l.key);
     }
+
 }

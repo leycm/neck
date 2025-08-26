@@ -415,7 +415,6 @@ public interface MinecraftTextAdapters {
         private @NotNull String buildClosingTags(@NotNull Style style) {
             StringBuilder tags = new StringBuilder();
 
-            // Close in reverse order
             if (style.getClickAction() != null && style.getClickValue() != null) {
                 tags.append("</click>");
             }
@@ -480,7 +479,7 @@ public interface MinecraftTextAdapters {
                     case "hover" -> {
                         String[] hoverParts = params.split(":", 2);
                         yield hoverParts.length > 1 ?
-                                currentStyle.copy().hoverAction(hoverParts[0], hoverParts[1]) :
+                                currentStyle.copy().hoverAction(hoverParts[0], hoverParts[1].replaceAll("\"", "")) :
                                 currentStyle;
                     }
                     case "click" -> {
@@ -489,7 +488,6 @@ public interface MinecraftTextAdapters {
                                 currentStyle.copy().clickAction(clickParts[0], clickParts[1]) :
                                 currentStyle;
                     }
-                    case "key" -> currentStyle;
                     default -> currentStyle;
                 };
             }
@@ -633,7 +631,7 @@ public interface MinecraftTextAdapters {
         /**
          * Converts HSV color values to RGB hex string
          */
-        public static String hsvToHex(float hue, float saturation, float value) {
+        public static @NotNull String hsvToHex(float hue, float saturation, float value) {
             int rgb = java.awt.Color.HSBtoRGB(hue / 360f, saturation, value);
             return String.format("%06X", rgb & 0xFFFFFF);
         }
@@ -641,9 +639,9 @@ public interface MinecraftTextAdapters {
         /**
          * Interpolates between two hex colors
          */
-        public static String interpolateColors(String hex1, String hex2, double t) {
+        public static String interpolateColors(@NotNull String hex1, String hex2, double t) {
             if (hex1.length() != 6 || hex2.length() != 6) {
-                return hex1; // Return first color if invalid
+                return hex1;
             }
 
             try {
@@ -659,14 +657,13 @@ public interface MinecraftTextAdapters {
                 int g = (int) Math.round(g1 + t * (g2 - g1));
                 int b = (int) Math.round(b1 + t * (b2 - b1));
 
-                // Clamp values to 0-255 range
                 r = Math.max(0, Math.min(255, r));
                 g = Math.max(0, Math.min(255, g));
                 b = Math.max(0, Math.min(255, b));
 
                 return String.format("%02X%02X%02X", r, g, b);
             } catch (NumberFormatException e) {
-                return hex1; // Return first color if parsing fails
+                return hex1;
             }
         }
 
@@ -688,20 +685,18 @@ public interface MinecraftTextAdapters {
         /**
          * Normalizes a color string to hex format
          */
-        public static String normalizeColor(String color) {
+        public static @NotNull String normalizeColor(String color) {
             if (color == null || color.isEmpty()) {
-                return "FFFFFF"; // Default to white
+                return "FFFFFF";
             }
 
             String trimmed = color.trim();
 
-            // Handle hex colors
             if (trimmed.startsWith("#")) {
                 String hex = trimmed.substring(1);
                 return isValidHexColor(hex) ? hex.toUpperCase() : "FFFFFF";
             }
 
-            // Handle named colors
             String hex = NAME_TO_HEX.get(trimmed.toLowerCase());
             return hex != null ? hex : "FFFFFF";
         }
