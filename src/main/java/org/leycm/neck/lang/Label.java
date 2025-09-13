@@ -39,7 +39,7 @@ public class Label {
 
             if (path.isEmpty() || key.isEmpty()) throw new IllegalArgumentException("Path and key cannot be empty");
 
-            return new Label(path, key, TextProvider.getDefault());
+            return new Label(path, key, TextProcessor.getDefault());
         }
 
         throw new IllegalArgumentException("This is not a Label");
@@ -57,10 +57,10 @@ public class Label {
 
     @Contract(value = "_, _ -> new", pure = true)
     public static @NotNull Label of(String path, String key) {
-        return new Label(path, key, TextProvider.getDefault());
+        return new Label(path, key, TextProcessor.getDefault());
     }
 
-    Label(String path, String key, TextProvider provider) {
+    Label(String path, String key, TextProcessor provider) {
         this.label = lang -> provider.translationOf(path, key, lang);
         this.path = path;
         this.key = key;

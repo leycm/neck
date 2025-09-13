@@ -1,7 +1,5 @@
 package org.leycm.neck.lang;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.leycm.neck.lang.adapters.JsonTextAdapter;
 
@@ -10,14 +8,14 @@ import java.util.*;
 public class Text {
 
     private final List<Part> parts = new ArrayList<>();
-    private final TextProvider provider;
+    private final TextProcessor provider;
 
-    public Text(TextProvider provider) {
+    public Text(TextProcessor provider) {
         this.provider = provider;
     }
 
     public static @NotNull Text of(String value) {
-        Text text = new Text(TextProvider.getDefault());
+        Text text = new Text(TextProcessor.getDefault());
         text.parts.add(new Part(value, null));
         return text;
     }
@@ -79,10 +77,10 @@ public class Text {
     }
 
     public static <T> Text from(@NotNull T object) {
-        return from(object, TextProvider.getDefault());
+        return from(object, TextProcessor.getDefault());
     }
 
-    public static <T> Text from(@NotNull T object, @NotNull TextProvider provider) {
+    public static <T> Text from(@NotNull T object, @NotNull TextProcessor provider) {
         //noinspection unchecked
         Text.Adapter<T> adapter = provider.getTextAdapter((Class<T>) object.getClass());
         if (adapter == null) {
@@ -95,8 +93,8 @@ public class Text {
         return Collections.unmodifiableList(parts);
     }
 
-    public static TextProvider getProvider() {
-        return TextProvider.getDefault();
+    public static TextProcessor getProvider() {
+        return TextProcessor.getDefault();
     }
 
     // === Records ===

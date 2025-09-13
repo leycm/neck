@@ -14,7 +14,7 @@ public class PreLabel extends Label {
     }
 
     private PreLabel(Text text) {
-        super(null, null, TextProvider.getDefault());
+        super(null, null, TextProcessor.getDefault());
         this.text = text;
     }
 

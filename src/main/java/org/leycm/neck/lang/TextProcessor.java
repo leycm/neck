@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.leycm.neck.lang.adapters.MinecraftTextAdapters;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +17,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class TextProvider {
-    private static TextProvider instance;
+public class TextProcessor {
+    private static TextProcessor instance;
     private static final String DEFAULT_LANG_DIR = ".lang";
 
     private final Map<String, JsonObject> langCache = new HashMap<>();
@@ -29,7 +28,7 @@ public class TextProvider {
     private final String langPath;
     private final Text.Adapter<String> reader;
 
-    public TextProvider(String path, Text.Adapter<String> reader) throws IOException {
+    public TextProcessor(String path, Text.Adapter<String> reader) throws IOException {
         this.langPath = path != null ? path : DEFAULT_LANG_DIR;
         this.reader = reader;
         Files.createDirectories(Path.of(langPath));
@@ -170,12 +169,13 @@ public class TextProvider {
         langCache.clear();
     }
 
-    public static TextProvider createDefault(String path, Text.Adapter<String> reader) {
-        try {return instance = new TextProvider(path, reader);
+    public static void createDefault(String path, Text.Adapter<String> reader) {
+        try {
+            instance = new TextProcessor(path, reader);
         } catch (IOException e) {throw new RuntimeException(e);}
     }
 
-    public static TextProvider getDefault() {
+    public static TextProcessor getDefault() {
         return instance;
     }
 

@@ -2,7 +2,7 @@ package org.leycm.neck.lang.adapters;
 
 import org.jetbrains.annotations.NotNull;
 import org.leycm.neck.lang.Text;
-import org.leycm.neck.lang.TextProvider;
+import org.leycm.neck.lang.TextProcessor;
 import org.leycm.neck.lang.Style;
 
 import java.util.*;
@@ -88,7 +88,7 @@ public interface MinecraftTextAdapters {
 
         @Override
         public @NotNull Text from(@NotNull String input) {
-            Text text = new Text(TextProvider.getDefault());
+            Text text = new Text(TextProcessor.getDefault());
 
             // Handle special cases first: rainbow, gradient, transition
             input = processSpecialTags(input, text);
@@ -537,7 +537,7 @@ public interface MinecraftTextAdapters {
 
         @Override
         public @NotNull Text from(@NotNull String input) {
-            Text text = new Text(TextProvider.getDefault());
+            Text text = new Text(TextProcessor.getDefault());
             Matcher matcher = LEGACY_PATTERN.matcher(input);
 
             int lastIndex = 0;

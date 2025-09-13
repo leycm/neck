@@ -7,7 +7,7 @@ import org.leycm.neck.lang.adapters.MinecraftTextAdapters;
 public class LangTest {
 
     public static void main(String[] args) {
-        TextProvider.createDefault(null, MinecraftTextAdapters.MINI_MESSAGE);
+        TextProcessor.createDefault(null, MinecraftTextAdapters.MINI_MESSAGE);
 
         Label label = Label.of("message.error", "du.message");
 
