@@ -3,6 +3,7 @@ package org.leycm.neck.lang.adapters;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import org.leycm.neck.lang.Text;
 import org.leycm.neck.lang.Style;
 

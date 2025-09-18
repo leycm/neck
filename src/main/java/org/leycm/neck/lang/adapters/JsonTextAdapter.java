@@ -2,6 +2,7 @@ package org.leycm.neck.lang.adapters;
 
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
+
 import org.leycm.neck.lang.Text;
 import org.leycm.neck.lang.Style;
 import org.leycm.neck.lang.Text.Part;

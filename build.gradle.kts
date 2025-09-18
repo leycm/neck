@@ -4,9 +4,15 @@ plugins {
 
 }
 
-group = "org.leycm"
-description = "neck"
-version = "1.0.5"
+group = "org.leycm.neck"
+description = "Neck utils"
+version = "1.1.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(22)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -33,7 +39,7 @@ publishing {
         from(components["java"])
 
         groupId = group.toString()
-        artifactId = description
+        artifactId = "neck"
         version = rootProject.version as String?
     }
 }
