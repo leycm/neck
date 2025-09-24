@@ -6,7 +6,7 @@ plugins {
 
 group = "org.leycm.neck"
 description = "Neck utils"
-version = "1.1.0"
+version = "2.1.0"
 
 java {
     toolchain {
@@ -16,6 +16,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -23,11 +24,18 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation("org.springframework:spring-context:6.1.9")
+    implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("org.jetbrains:annotations:24.0.1")
 
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("org.slf4j:slf4j-simple:2.0.9")
+
+    implementation("net.kyori:adventure-api:4.24.0")
+    implementation("net.kyori:adventure-text-serializer-gson:4.24.0")
+    implementation("net.kyori:adventure-text-serializer-plain:4.24.0")
+    implementation("net.kyori:adventure-text-minimessage:4.24.0")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.24.0")
 }
 
 tasks.test {

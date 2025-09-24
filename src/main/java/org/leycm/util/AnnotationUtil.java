@@ -1,4 +1,4 @@
-package org.leycm.neck.util;
+package org.leycm.util;
 
 import org.jetbrains.annotations.Nullable;
 

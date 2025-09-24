@@ -1,4 +1,4 @@
-package org.leycm.neck.io;
+package org.leycm.io;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Contract;
