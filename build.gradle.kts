@@ -167,6 +167,6 @@ tasks.register("packets") {
             }
         }
 
-        println("[✓] All plugin builds finished and moved to /out/")
+        println("[ ] All plugin builds finished and moved to /out/")
     }
 }
