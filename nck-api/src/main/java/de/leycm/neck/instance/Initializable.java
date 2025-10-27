@@ -40,6 +40,17 @@ public interface Initializable {
     }
 
     /**
+     * Checks whether an instance is registered for the specified class.
+     *
+     * @param clazz the class to check for a registered instance
+     * @return {@code true} if an instance is registered for the class, {@code false} otherwise
+     * @see InitializableRegistry#hasInstance(Class)
+     */
+    static boolean hasInstance(final @NonNull Class<?> clazz) {
+        return InitializableRegistry.hasInstance(clazz);
+    }
+
+    /**
      * Registers an instance of {@link Initializable} for the specified class.
      *
      * @param <T>      the type of the instance

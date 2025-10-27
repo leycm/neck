@@ -55,6 +55,16 @@ public class InitializableRegistry {
     }
 
     /**
+     * Checks whether an instance is registered for the specified class.
+     *
+     * @param clazz the class to check for a registered instance
+     * @return {@code true} if an instance is registered for the class, {@code false} otherwise
+     */
+    protected static boolean hasInstance(final @NonNull Class<?> clazz) {
+        return REGISTRY.containsKey(clazz);
+    }
+
+    /**
      * Registers an instance of {@link Initializable} for the specified class.
      * Calls {@link Initializable#onInstall()} on the instance before storing it.
      *
