@@ -58,7 +58,14 @@ subprojects.forEach { sub ->
 //  ─────────────────────────────────────────────
 //  Sync root properties into all subprojects
 //  ─────────────────────────────────────────────
-rootProject.properties.forEach { (k, v) ->
+val rootProps = Properties().apply {
+    val file = rootProject.file("gradle.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+rootProps.forEach { (k, v) ->
     rootProject.extra[k.toString()] = v
     subprojects.forEach { sub -> sub.extra[k.toString()] = v }
 }
@@ -90,6 +97,11 @@ subprojects {
         from({
             deps.map { if (it.isDirectory) it else zipTree(it) }
         })
+
+        val javadocTask = tasks.named("javadoc")
+        from(javadocTask.map { it.outputs.files }) {
+            into("docs")
+        }
 
         exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -167,6 +179,6 @@ tasks.register("packets") {
             }
         }
 
-        println("[ ] All plugin builds finished and moved to /out/")
+        println("[✓] All plugin builds finished and moved to /out/")
     }
 }
