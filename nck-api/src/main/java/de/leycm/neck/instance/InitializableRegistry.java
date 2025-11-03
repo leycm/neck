@@ -13,6 +13,7 @@ package de.leycm.neck.instance;
 import lombok.NonNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Registry for managing singleton-like instances of {@link Initializable} objects.
@@ -47,6 +48,33 @@ public class InitializableRegistry {
 
         if (instance == null)
             throw new NullPointerException("No instance registered for " + clazz.getSimpleName());
+
+        if (!clazz.isInstance(instance))
+            throw new ClassCastException("Registered instance is not of type " + clazz.getSimpleName());
+
+        return (T) instance;
+    }
+
+    /**
+     * Retrieves the registered instance for the specified class, or computes and registers it
+     * if not already present.
+     * <p>
+     * If an instance is already registered for the class, it is returned. Otherwise, the
+     * {@code mappingFunction} is called to create a new instance, which is then stored in
+     * the registry and returned.
+     * </p>
+     *
+     * @param <T>            the type of the instance
+     * @param clazz          the class of the instance to retrieve or compute
+     * @param mappingFunction a function to compute a new instance if none is registered
+     * @return the registered or newly computed instance
+     * @throws ClassCastException if the registered instance is not assignable to the class
+     * @see #register(Initializable, Class)
+     */
+    @SuppressWarnings("unchecked")
+    protected static <T extends Initializable> @NonNull T computeIfAbsent(final @NonNull Class<T> clazz,
+                                                                          final @NonNull Function<Class<?>, T> mappingFunction) {
+        Initializable instance = REGISTRY.computeIfAbsent(clazz, mappingFunction);
 
         if (!clazz.isInstance(instance))
             throw new ClassCastException("Registered instance is not of type " + clazz.getSimpleName());
