@@ -80,9 +80,16 @@ subprojects {
 
     java {
         toolchain.languageVersion.set(JavaLanguageVersion.of(property("javaVersion").toString().toInt()))
+        withSourcesJar()
+        withJavadocJar()
     }
 
     tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
+    tasks.withType<Javadoc> {
+        isFailOnError = false
         options.encoding = "UTF-8"
     }
 
@@ -97,11 +104,6 @@ subprojects {
         from({
             deps.map { if (it.isDirectory) it else zipTree(it) }
         })
-
-        val javadocTask = tasks.named("javadoc")
-        from(javadocTask.map { it.outputs.files }) {
-            into("docs")
-        }
 
         exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -127,6 +129,26 @@ subprojects {
                 groupId = project.group.toString()
                 artifactId = project.name
                 version = project.version.toString()
+
+                pom {
+                    name.set(project.name)
+                    description.set("Automatically published by LEYCM build system.")
+                    url.set("https://github.com/leycm")
+
+                    licenses {
+                        license {
+                            name.set("LECP License")
+                            url.set("https://github.com/leycm/leycm/blob/main/LICENSE")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("leycm")
+                            name.set("LeyCM")
+                            email.set("leycm@proton.me")
+                        }
+                    }
+                }
             }
         }
         repositories {
@@ -155,7 +177,6 @@ subprojects {
     tasks.named("publish") {
         finalizedBy("pushRepo")
     }
-
 }
 
 //  ─────────────────────────────────────────────
