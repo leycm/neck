@@ -18,24 +18,46 @@ public class Result<T> {
     private final Throwable throwable;
     private final T result;
 
+    public static <T> @NonNull Result<T> result(final @NonNull Supplier<T> supplier) {
+        try {
+            return Result.ofNullable(supplier.get());
+        } catch (Throwable throwable) {
+            return Result.throwing(throwable);
+        }
+    }
+
+
+    public static <T> @NonNull Result<T> result(final @NonNull OptionalSupplier<T> supplier) {
+        try {
+            Optional<T> optional = supplier.get();
+            return optional.map(Result::ofNullable).orElseGet(Result::empty);
+        } catch (Throwable throwable) {
+            return Result.throwing(throwable);
+        }
+    }
+
+    @FunctionalInterface
+    public interface OptionalSupplier<T>
+            extends Supplier<Optional<T>> { }
+
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull Result<?> throwing(final Throwable throwable) {
+    public static <R> @NonNull Result<R> throwing(final Throwable throwable) {
         return new Result<>(null, throwable);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull Result<?> of(final @NotNull("Value cannot be null use Result#empty() instead") Object value) {
+    public static <R> @NonNull Result<R> of(final @NotNull("Value cannot be null use Result#empty() instead") R value) {
         return new Result<>(value, null);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull Result<?> ofNullable(final Object value) {
+    public static <R> @NonNull Result<R> ofNullable(final R value) {
         return value == null ? empty() : new Result<>(value, null);
     }
 
     @Contract(value = "-> new", pure = true)
-    public static @NonNull Result<?> empty() {
-        return EMPTY;
+    public static <R> @NonNull Result<R> empty() {
+        return (Result<R>) EMPTY;
     }
 
     private Result(final T result, final Throwable throwable) {
@@ -98,8 +120,13 @@ public class Result<T> {
         return this == EMPTY;
     }
 
-    public boolean isSuccessful() {
-        return throwable == null;
+    public boolean hasThrewA(Class<? extends  Throwable> exception) {
+        if (!hasThrew()) return false;
+        return exception.isInstance(throwable);
+    }
+
+    public boolean hasThrew() {
+        return throwable != null;
     }
 
     public @NonNull String asString() {
